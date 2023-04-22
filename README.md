@@ -3,6 +3,8 @@
 ## Cai dat truoc <br/>
 - [Node](https://nodejs.org/en)
 
+## Install
+
 ```
 git clone https://github.com/realhugn/BE-IT4409.git
 npm install \\ download dependencies
