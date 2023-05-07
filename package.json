@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js --exec \"node -r dotenv/config --experimental-specifier-resolution=node\""
+    "dev": "nodemon index.js --exec \"node -r dotenv/config --experimental-specifier-resolution=node\"",
+    "db" : "mysql -u it4409 -p it4409 < db.sql"
   },
   "author": "",
   "license": "ISC",
