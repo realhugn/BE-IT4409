@@ -1,12 +1,24 @@
 # BE - IT4409
 
-## Cai dat truoc <br/>
+## Cài đặt trước <br/>
 - [Node](https://nodejs.org/en)
+- [MySQL](https://www.mysql.com/)
 
 ## Install
+
+##### Cài đặt .env file
+
+`PORT`: Port của server 
+`MYSQL_USER`: Username của mysql
+`MYSQL_PASS`: Password của mysql
+`MYSQL_DB`: Tên database  
+
+##### Chạy project
 
 ```
 git clone https://github.com/realhugn/BE-IT4409.git
 npm install \\ download dependencies
-npm run dev \\run server
+npm run db \\ run the db
+npm run dev \\ run server
 ```
+
