@@ -6,7 +6,7 @@ use it4409;
 create table users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username varchar(50) NOT NULL unique,
-    password varchar(50) NOT NULL,
+    password varchar(70) NOT NULL,
     phone varchar(11) NOT NULL,
     status boolean,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
