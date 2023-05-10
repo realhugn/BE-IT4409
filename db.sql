@@ -8,31 +8,34 @@ create table users (
     username varchar(50) NOT NULL unique,
     password varchar(70) NOT NULL,
     phone varchar(11) NOT NULL,
+    role enum('owner', 'normal'),
     status boolean,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP 
 );
 
-create table houseowners (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username varchar(50) NOT NULL unique,
-    password varchar(50) NOT NULL,
-    phone varchar(11) NOT NULL,
-    status boolean,
-    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp DEFAULT CURRENT_TIMESTAMP 
-);
 
 create table houses (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     size INT NOT NULL,
-    houseowners_id INT NOT NULL REFERENCES houseowners(id),
+    owner_id INT NOT NULL REFERENCES users(id),
     status boolean,
     price INT NOT NULL,
     location varchar(100) NOT NULL,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp DEFAULT CURRENT_TIMESTAMP 
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP
 );
+
+DELIMITER $$
+create trigger is_owner before insert
+on houses for each row
+begin
+    if ((SELECT role from users where users.id = new.owner_id) != 'owner' )then
+        SIGNAL SQLSTATE  '45000'  
+        SET MESSAGE_TEXT  = "Invalid";
+   end if;
+end$$ 
+DELIMITER ; 
 
 create table posts (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
