@@ -4,7 +4,7 @@ class User {
     async create(data) {
         try {
             const values = [data.username, data.password, data.phone, data.status]
-            const statement = `insert into users (username, password, phone, status) values (?,?,?,?);`
+            const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "normal");`
             await db.query(statement, values)
             const rs =await this.findByUname(data.username)
             return rs[0]
@@ -33,7 +33,10 @@ class User {
             const values = [username]
             const statement = `select * from users where username = ?;`
             const rs = await db.query(statement, values)
-            return rs[0];
+            if(rs[0].length > 0)
+                return rs[0][0];
+            else 
+                return null;
         } catch (error) {
             throw error
         }
@@ -42,7 +45,7 @@ class User {
     async update(data) {
         try {
             const values = [ data.password,data.phone,data.id ]
-            const statement = `update users set password = ? , phone = ? ,updated_at = now() where id = ?;`
+            const statement = `update users set password = ? , phone = ? ,role =? ,updated_at = now() where id = ?;`
             const rs = await db.query(statement, values)
             if(rs.rows.length > 0) {
                 return rs.rows[0];
