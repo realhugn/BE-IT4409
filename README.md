@@ -21,4 +21,5 @@ npm install \\ download dependencies
 npm run db \\ run the db
 npm run dev \\ run server
 ```
-
+## API 
+[Link Postman Document](https://documenter.getpostman.com/view/17100663/2s93ecwA44)
