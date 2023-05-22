@@ -28,11 +28,11 @@ class UserService {
         }
     }
 
-    async updateUser(data) {
+    async updateProfile(data) {
         try {
             const isExist = await this.getUser(data.id)
             if(!isExist) return null
-            const updateUser = await User.update(data)
+            const updateUser = await User.update(isExist.password, data.phone, data.id)
             return updateUser
         } catch (error) {
             throw error

@@ -42,10 +42,10 @@ class User {
         }
     }
 
-    async update(data) {
+    async update(password, phone, id) {
         try {
-            const values = [ data.password,data.phone,data.id ]
-            const statement = `update users set password = ? , phone = ? ,role =? ,updated_at = now() where id = ?;`
+            const values = [ password,phone,id ]
+            const statement = `update users set password = ? , phone = ? ,updated_at = now() where id = ?;`
             const rs = await db.query(statement, values)
             if(rs.rows.length > 0) {
                 return rs.rows[0];
