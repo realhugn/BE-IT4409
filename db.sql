@@ -39,9 +39,9 @@ DELIMITER ;
 
 create table posts (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50),
-    img VARCHAR(50),
-    body  varchar(250),
+    title VARCHAR(50) NOT NULL,
+    img VARCHAR(50) NOT NULL,
+    body varchar(250) NOT NULL,
     houses_id INT REFERENCES houses(id),
     status boolean,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,

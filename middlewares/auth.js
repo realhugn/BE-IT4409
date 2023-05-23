@@ -1,4 +1,4 @@
-
+import jwt from 'jsonwebtoken'
 
 export const verifyTokenUser = async(req,res,next) => {
     try {
@@ -15,5 +15,16 @@ export const verifyTokenUser = async(req,res,next) => {
           })
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const isAuth = async (req, res, next) => {
+    try {
+        let loggedInUserId = req.params.id;
+        if (!loggedInUserId || !req.user.userId || loggedInUserId != req.user.userId) 
+            return res.status(403).json({ msg: "You are not authenticate" });
+        next()
+    } catch (error) {
+        return res.status(404).json({msg: error});
     }
 }
