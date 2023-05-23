@@ -6,7 +6,7 @@ export const signUp = async (req,res,next) =>{
     try {
         const {username, password, phone} = req.body
         const isExist = await userService.find(username)
-        if(isExist.length > 0) return res.status(400).json({msg: "Username already exist", status: false})
+        if(isExist > 0) return res.status(400).json({msg: "Username already exist", status: false})
         const hashPassword = await bcrypt.hash(password,8)
         const newUser = await userService.createUser({username,password: hashPassword,phone,status:true})
         const accessToken = SignToken(newUser.id)
