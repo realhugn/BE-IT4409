@@ -40,7 +40,7 @@ DELIMITER ;
 create table posts (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
-    img VARCHAR(50) NOT NULL,
+    img JSON NOT NULL,
     body varchar(250) NOT NULL,
     houses_id INT REFERENCES houses(id),
     status boolean,
