@@ -7,7 +7,7 @@ class User {
             const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "normal");`
             await db.query(statement, values)
             const rs =await this.findByUname(data.username)
-            return rs[0]
+            return rs
         } catch (error) {
             throw error
         }
@@ -31,7 +31,7 @@ class User {
     async findByUname(username) {
         try {
             const values = [username]
-            const statement = `select * from users where username = ?;`
+            const statement = `select id,username,password,phone,role,status,created_at,updated_at from users where username = ?;`
             const rs = await db.query(statement, values)
             if(rs[0].length > 0) {
                 return rs[0][0]
