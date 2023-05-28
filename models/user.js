@@ -1,4 +1,4 @@
-import {db} from '../configs/db.js'
+import { db } from '../configs/db.js'
 
 class User {
     async create(data) {
@@ -6,7 +6,7 @@ class User {
             const values = [data.username, data.password, data.phone, data.status]
             const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "normal");`
             await db.query(statement, values)
-            const rs =await this.findByUname(data.username)
+            const rs = await this.findByUname(data.username)
             return rs[0]
         } catch (error) {
             throw error
@@ -18,13 +18,13 @@ class User {
             const values = [id]
             const statement = `select id,username,phone,role,status,created_at,updated_at from users where id = ?;`
             const rs = await db.query(statement, values)
-            if(rs[0].length > 0) {
+            if (rs[0].length > 0) {
                 return rs[0][0]
             } else {
                 return null
             }
         } catch (error) {
-            throw error 
+            throw error
         }
     }
 
@@ -33,7 +33,7 @@ class User {
             const values = [username]
             const statement = `select * from users where username = ?;`
             const rs = await db.query(statement, values)
-            if(rs[0].length > 0) {
+            if (rs[0].length > 0) {
                 return rs[0][0]
             } else {
                 return null
@@ -45,7 +45,7 @@ class User {
 
     async updateProfile(phone, id) {
         try {
-            const values = [ phone,id ]
+            const values = [phone, id]
             const statement = `update users set phone = ? ,updated_at = now() where id = ?;`
             await db.query(statement, values)
             return await this.get(id)
@@ -56,8 +56,8 @@ class User {
 
     async delete(id) {
         try {
-            const statement = `update users set status = false ,updated_at = now() where id = ? ;` 
-            const rs = await db.query(statement,[id])
+            const statement = `update users set status = false ,updated_at = now() where id = ? ;`
+            const rs = await db.query(statement, [id])
             return await this.get(id)
         } catch (error) {
             throw new Error(error);
@@ -66,19 +66,29 @@ class User {
 
     async makeOwner(id) {
         try {
-            const values = [id ]
+            const values = [id]
             const statement = `update users set role = "owner" ,updated_at = now() where id = ?;`
             const rs = await db.query(statement, values)
-            if(rs[0].length > 0) {
+            if (rs[0].length > 0) {
                 return rs[0]
             } else {
                 return null
             }
         } catch (error) {
-            
+
         }
     }
-
+    async updatePassword(new_password, id) {
+        try {
+            console.log(new_password,id);
+            const values = [new_password, id]
+            const statement = `update users set password = ? ,updated_at = now() where id = ?;`
+            await db.query(statement, values)
+            return await this.get(id)
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 export default new User()

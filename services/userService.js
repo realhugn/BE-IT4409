@@ -32,7 +32,7 @@ class UserService {
         try {
             const isExist = await this.getUser(data.id)
             if(!isExist) return null
-            const updateUser = await User.updateProfile(data.phone, data.id)
+            const updateUser = await User.updatePassword(data.new_password, data.id)
             return updateUser
         } catch (error) {
             throw error
@@ -40,6 +40,17 @@ class UserService {
     }
 
     async deleteUser(id) {
+        try {
+            const isExist = await this.getUser(id)
+            if(!isExist) 
+                return null
+            const deletedUser = await User.delete(id)
+            return deletedUser
+        } catch (error) {
+            throw error
+        }
+    }
+    async updaterUserPassword(id){
         try {
             const isExist = await this.getUser(id)
             if(!isExist) 

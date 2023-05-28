@@ -36,3 +36,16 @@ export const deleteUser = async(req,res,next) => {
         return res.status(200).json({msg: "Server Error", status: false})
     }
 }
+
+export const updateUserPassword=async(req,res,next)=>{
+    try {
+        const {new_password} = req.body
+        const id = req.user.userId
+        const updatedUser = await userService.updateProfile({new_password, id})
+        if(!updatedUser) return res.status(404).json({msg: "User Not Found", status: false})
+        res.status(200).json({msg:"Updated User", data: updatedUser, status: true})
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({msg: "Server Error", status: false})
+    }
+}
