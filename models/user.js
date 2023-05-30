@@ -68,12 +68,8 @@ class User {
         try {
             const values = [id ]
             const statement = `update users set role = "owner" ,updated_at = now() where id = ?;`
-            const rs = await db.query(statement, values)
-            if(rs[0].length > 0) {
-                return rs[0]
-            } else {
-                return null
-            }
+            await db.query(statement, values)
+            return await this.get(id)
         } catch (error) {
             
         }

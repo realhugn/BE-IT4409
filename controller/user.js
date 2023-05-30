@@ -36,3 +36,15 @@ export const deleteUser = async(req,res,next) => {
         return res.status(200).json({msg: "Server Error", status: false})
     }
 }
+
+export const makeOwner = async (req,res, next) => {
+    try {
+        const id = req.user.userId
+        const user = await userService.makeOwner(id)
+        if(!user) return res.status(404).json({msg: "User Not Found", status: false})
+        res.status(200).json({msg:"Updated User", data: user, status: true})
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({msg: "Server Error", status: false})
+    }
+}

@@ -51,6 +51,18 @@ class UserService {
         }
     }
 
+    async makeOwner(id) {
+        try {
+            const isExist = await this.getUser(id)
+            if(!isExist) 
+                return null
+            const user = await User.makeOwner(id)
+            return user
+        } catch (error) {
+            throw error
+        }
+    }
+
 }
 
 export default new UserService()
