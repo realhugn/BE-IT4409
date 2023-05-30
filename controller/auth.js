@@ -9,6 +9,7 @@ export const signUp = async (req,res,next) =>{
         if(isExist) return res.status(400).json({msg: "Username already exist", status: false})
         const hashPassword = await bcrypt.hash(password,8)
         const newUser = await userService.createUser({username,password: hashPassword,phone,status:true})
+        console.log(newUser)
         const accessToken = SignToken(newUser.id)
         res.status(200).json({msg:"created successfully", status: true, data: {newUser, accessToken}})
     } catch (error) {
