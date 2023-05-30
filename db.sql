@@ -3,83 +3,117 @@ CREATE DATABASE it4409;
 
 use it4409;
 
-create table users (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username varchar(50) NOT NULL unique,
+create table owner (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    phone varchar(11) NOT NULL unique,
     password varchar(70) NOT NULL,
-    phone varchar(11) NOT NULL,
-    role enum('owner', 'normal'),
-    status boolean,
+    name varchar(50) NOT NULL,
+    birthday DATE,
+    gender varchar(20),
+    address varchar(70),
+    email varchar(70),
+    role varchar(70) DEFAULT "ROLE_OWNER",
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP 
 );
 
+create table renter (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    phone varchar(11) NOT NULL unique,
+    password varchar(70) NOT NULL,
+    name varchar(50) NOT NULL,
+    birthday DATE,
+    gender varchar(20),
+    address varchar(100),
+    email varchar(70),
+    role varchar(70) DEFAULT "ROLE_RENTER",
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP 
+);
 
-create table houses (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    size INT NOT NULL,
-    owner_id INT NOT NULL REFERENCES users(id),
-    status boolean,
-    price INT NOT NULL,
+create table house (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    owner_id INT NOT NULL ,
+    name varchar(100) NOT NULL,
     location varchar(100) NOT NULL,
+    description varchar(200),
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp DEFAULT CURRENT_TIMESTAMP
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+    Foreign key (owner_id) REFERENCES owner(id)
 );
 
-DELIMITER $$
-create trigger is_owner before insert
-on houses for each row
-begin
-    if ((SELECT role from users where users.id = new.owner_id) != 'owner' )then
-        SIGNAL SQLSTATE  '45000'  
-        SET MESSAGE_TEXT  = "Invalid";
-   end if;
-end$$ 
-DELIMITER ; 
+create table room (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    house_id INT NOT NULL,
+    name varchar(100) NOT NULL,
+    cost INT NOT NULL,
+    maxUser INT,
+    description varchar(200),
+    status enum("AVAILABLE", "UNAVAILABLE"),
+    Foreign key (house_id) REFERENCES house(id)
+);
 
-create table posts (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(50) NOT NULL,
-    img VARCHAR(50) NOT NULL,
-    body varchar(250) NOT NULL,
-    houses_id INT REFERENCES houses(id),
+create table deposit (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    renter_id INT NOT NULL ,
+    room_id INT NOT NULL ,
+    tien_coc INT NOT NULL,
     status boolean,
-    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp DEFAULT CURRENT_TIMESTAMP
+    start_time timestamp DEFAULT CURRENT_TIMESTAMP,
+    end_time timestamp NOT NULL,
+    Foreign key (renter_id) REFERENCES renter(id),
+    Foreign key (room_id) REFERENCES room(id)
 );
 
-create table savedposts (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    post_id INT REFERENCES posts(id),
-    user_id Int REFERENCES users(id),
-    created_at timestamp DEFAULT CURRENT_TIMESTAMP
-);
-
-create table datcoc (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    house_id INT REFERENCES houses(id),
-    tien_coc INT,
-    status boolean,
-    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp DEFAULT CURRENT_TIMESTAMP
-);
-
-create table hopdong (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    datcoc_id INT REFERENCES datcoc(id),
+create table covenant (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    room_id INT NOT NULL REFERENCES room(id),
+    renter_id INT NOT NULL REFERENCES renter(id),
+    duration INT NOT NULL,
+    pay_time INT NOT NULL,
+    pre_pay INT,
+    note varchar(200),
     started_date timestamp DEFAULT CURRENT_TIMESTAMP,
-    end_date timestamp DEFAULT CURRENT_TIMESTAMP
+    end_date timestamp DEFAULT CURRENT_TIMESTAMP,
+    Foreign key (room_id) REFERENCES room(id),
+    Foreign key (renter_id) REFERENCES renter(id)
 );
 
-create table hoadon (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    hopdong_id INT REFERENCES hopdong(id),
-    electrical_price INT,
-    manual_price INT,
-    water_price INT,
-    other_price INT,
-    total_price INT,
-    created_at timestamp DEFAULT CURRENT_TIMESTAMP
+create table bill (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    covenant_id INT NOT NULL REFERENCES covenant(id),
+    total_price INT NOT NULL,
+    debt INT,
+    created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+     Foreign key (covenant_id) REFERENCES covenant(id)
 );
 
+create table service(
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    room_id INT NOT NULL REFERENCES room(id),
+    name varchar(100) NOT NULL,
+    cost INT NOT NULL,
+    unit varchar(30) NOT NULL,
+    description varchar(200),
+    Foreign key (room_id) REFERENCES room(id)
+);
+
+create table bill_service (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    service_id INT NOT NULL REFERENCES service(id),
+    bill_id INT NOT NULL REFERENCES  bill(id),
+    num INT NOT NULL,
+    Foreign key (bill_id) REFERENCES bill(id),
+    Foreign key (service_id) REFERENCES service(id)
+);
+
+-- DELIMITER $$
+-- create trigger is_owner before insert
+-- on house for each row
+-- begin
+--     if ((SELECT role from user where user.id = new.owner_id) != "owner" )then
+--         SIGNAL SQLSTATE  "45000"  
+--         SET MESSAGE_TEXT  = "Invalid";
+--    end if;
+-- end$$ 
+-- DELIMITER ; 

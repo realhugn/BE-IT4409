@@ -4,7 +4,7 @@ class User {
     async create(data) {
         try {
             const values = [data.username, data.password, data.phone, data.status]
-            const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "normal");`
+            const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "owner");`
             await db.query(statement, values)
             const rs =await this.findByUname(data.username)
             return rs
