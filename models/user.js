@@ -7,7 +7,7 @@ class User {
             const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "normal");`
             await db.query(statement, values)
             const rs =await this.findByUname(data.username)
-            return rs[0]
+            return rs
         } catch (error) {
             throw error
         }
