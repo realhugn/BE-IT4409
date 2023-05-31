@@ -1,12 +1,12 @@
 import {db} from '../configs/db.js'
 
-class User {
+class Owner {
     async create(data) {
         try {
-            const values = [data.username, data.password, data.phone, data.status]
-            const statement = `insert into users (username, password, phone, status, role) values (?,?,?,?, "owner");`
+            const values = [data.name, data.password, data.phone, data.birthday, data.address, data.email]
+            const statement = `insert into owner (name, password, phone, birthday, address ,email, role) values (?,?,?,DATE(?),?,?, "owner");`
             await db.query(statement, values)
-            const rs =await this.findByUname(data.username)
+            const rs =await this.find(data.phone)
             return rs
         } catch (error) {
             throw error
@@ -16,7 +16,7 @@ class User {
     async get(id) {
         try {
             const values = [id]
-            const statement = `select id,username,phone,role,status,created_at,updated_at from users where id = ?;`
+            const statement = `select * from owner where id = ?;`
             const rs = await db.query(statement, values)
             if(rs[0].length > 0) {
                 return rs[0][0]
@@ -28,10 +28,10 @@ class User {
         }
     }
 
-    async findByUname(username) {
+    async find(phone) {
         try {
-            const values = [username]
-            const statement = `select * from users where username = ?;`
+            const values = [phone]
+            const statement = `select * from owner where phone = ?;`
             const rs = await db.query(statement, values)
             if(rs[0].length > 0) {
                 return rs[0][0]
@@ -43,12 +43,12 @@ class User {
         }
     }
 
-    async updateProfile(phone, id) {
+    async updateProfile(data) {
         try {
-            const values = [ phone,id ]
-            const statement = `update users set phone = ? ,updated_at = now() where id = ?;`
+            const values = [ data.phone, data.password, data.name, data.birthday,data.address,data.email,data.id]
+            const statement = `update owner set phone = ?,password = ?,name = ?, birthday =DATE(?), address=?,email =? ,updated_at = now() where id = ?;`
             await db.query(statement, values)
-            return await this.get(id)
+            return await this.get(data.id)
         } catch (error) {
             throw error
         }
@@ -56,9 +56,9 @@ class User {
 
     async delete(id) {
         try {
-            const statement = `update users set status = false ,updated_at = now() where id = ? ;` 
+            const statement = `DELETE  FROM owner where id = ? ;` 
             const rs = await db.query(statement,[id])
-            return await this.get(id)
+            return rs
         } catch (error) {
             throw new Error(error);
         }
@@ -67,7 +67,7 @@ class User {
     async makeOwner(id) {
         try {
             const values = [id ]
-            const statement = `update users set role = "owner" ,updated_at = now() where id = ?;`
+            const statement = `update owner set role = "owner" ,updated_at = now() where id = ?;`
             await db.query(statement, values)
             return await this.get(id)
         } catch (error) {
@@ -77,4 +77,4 @@ class User {
 
 }
 
-export default new User()
+export default new Owner()

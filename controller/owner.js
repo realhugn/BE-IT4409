@@ -1,9 +1,10 @@
-import userService from '../services/userService'
+import ownerService from '../services/ownerService'
+import bcrypt from 'bcrypt'
 
-export const getUser = async (req,res,next) =>{
+export const getOwner = async (req,res,next) =>{
     try {
         const id = req.params.id
-        const user = await userService.getUser(id)
+        const user = await ownerService.getOwner(id)
         if(!user) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"User Found", data: user, status: true})
     } catch (error) {
@@ -12,11 +13,12 @@ export const getUser = async (req,res,next) =>{
     }
 }
 
-export const updateUser = async(req,res,next) => {
+export const updateOwner = async(req,res,next) => {
     try {
-        const {phone} = req.body
+        const {phone,password, name, string, birthday, address, email} = req.body
         const id = req.user.userId
-        const updatedUser = await userService.updateProfile({phone, id})
+        const hashPassword = await bcrypt.hash(password,8)
+        const updatedUser = await ownerService.updateProfile({phone, password:hashPassword, name, string, birthday, address, email,id})
         if(!updatedUser) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"Updated User", data: updatedUser, status: true})
     } catch (error) {
@@ -25,22 +27,22 @@ export const updateUser = async(req,res,next) => {
     }
 }
 
-export const deleteUser = async(req,res,next) => {
+export const deleteOwner = async(req,res,next) => {
     try {
         const id = req.user.userId
-        const deletedUser = await userService.deleteUser(id)
+        const deletedUser = await ownerService.deleteOwner(id)
         if(!deletedUser) return res.status(404).json({msg: "User Not Found", status: false})
-        res.status(200).json({msg:"Updated User", data: deletedUser, status: true})
+        res.status(200).json({msg:"Delete success", data: deletedUser, status: true})
     } catch (error) {
         console.log(error)
-        return res.status(200).json({msg: "Server Error", status: false})
+        return res.status(200).json({msg: "Delete fail", status: false})
     }
 }
 
 export const makeOwner = async (req,res, next) => {
     try {
         const id = req.user.userId
-        const user = await userService.makeOwner(id)
+        const user = await ownerService.makeOwner(id)
         if(!user) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"Updated User", data: user, status: true})
     } catch (error) {

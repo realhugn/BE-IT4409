@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import userService from '../services/userService';
+import ownerService from '../services/ownerService';
 
 export const verifyTokenUser = async(req,res,next) => {
     try {
@@ -32,7 +32,7 @@ export const isAuth = async (req, res, next) => {
 
 export const isOwner = async (req,res,next) => {
     try {
-        let isOwner = await userService.getUser(req.user.userId)
+        let isOwner = await ownerService.getOwner(req.user.userId)
         if (isOwner.role !== 'owner') {
             return res.status(403).json({ msg: "You are not owner" });
         }
