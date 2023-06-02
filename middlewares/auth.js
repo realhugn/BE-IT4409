@@ -21,8 +21,11 @@ export const verifyTokenUser = async(req,res,next) => {
 
 export const isAuth = async (req, res, next) => {
     try {
+        let isOwner = await ownerService.getOwner(req.user.userId)
         let loggedInUserId = req.params.id;
-        if (!loggedInUserId || !req.user.userId || loggedInUserId != req.user.userId) 
+        if ( isOwner.role !== 'owner')
+            next()
+        else if (!loggedInUserId || !req.user.userId || loggedInUserId != req.user.userId) 
             return res.status(403).json({ msg: "You are not authenticate" });
         next()
     } catch (error) {
