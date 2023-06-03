@@ -29,7 +29,7 @@ class House {
 
     async all() {
         try {
-            const statement = `select * from houses`;
+            const statement = `select * from house`;
             const rs = await db.query(statement)
             return rs[0]
         } catch (error) {
@@ -50,9 +50,9 @@ class House {
 
     async delete(id) {
         try {
-            const statement = `update house set status = false ,updated_at = now() where id = ? ;` 
-           await db.query(statement,[id])
-            return await this.get(id)
+            const statement = `DELETE  FROM house where id = ? ;` 
+            const rs = await db.query(statement,[id])
+            return rs
         } catch (error) {
             throw error
         }

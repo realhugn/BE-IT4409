@@ -51,8 +51,7 @@ export const deleteHouse = async(req,res,next) => {
     try {
         const id = req.params.id
         const deletedHouse = await houseService.deleteHouse(id)
-        if(!deletedHouse) return res.status(404).json({msg: "Not Found", status: false})
-        res.status(200).json({msg:"Deleted", data: deletedHouse, status: true})
+        res.status(200).json({msg:"Deleted", status: true})
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: "Server Error", status: false})
