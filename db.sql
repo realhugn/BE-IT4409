@@ -65,18 +65,24 @@ create table deposit (
     Foreign key (room_id) REFERENCES room(id)
 );
 
+create table renter_room {
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    room_id INT NOT NULL ,
+    renter_id INT NOT NULL,
+    Foreign key (room_id) REFERENCES room(id),
+    Foreign key (renter_id) REFERENCES renter(id)
+};
+
 create table covenant (
     id INT  AUTO_INCREMENT PRIMARY KEY,
-    room_id INT NOT NULL REFERENCES room(id),
-    renter_id INT NOT NULL REFERENCES renter(id),
+    renter_room_id INT NOT NULL,
     duration INT NOT NULL,
     pay_time INT NOT NULL,
     pre_pay INT,
     note varchar(200),
     started_date timestamp DEFAULT CURRENT_TIMESTAMP,
     end_date timestamp DEFAULT CURRENT_TIMESTAMP,
-    Foreign key (room_id) REFERENCES room(id),
-    Foreign key (renter_id) REFERENCES renter(id)
+    Foreign key (renter_room_id) REFERENCES renter_room(id)
 );
 
 create table bill (
