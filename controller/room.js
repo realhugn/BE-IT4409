@@ -3,8 +3,8 @@ import roomService from '../services/roomService'
 export const createRoom = async (req,res,next) => {
     try {
         const {name, house_id,max_user, description,status, cost } = req.body
-        const createdHouse = await roomService.createRoom({name, house_id,max_user, description,status, cost})
-        res.status(200).json({msg:"Created success", data: createdHouse, status: true})
+        const createdRoom = await roomService.createRoom({name, house_id,max_user, description,status, cost})
+        res.status(200).json({msg:"Created success", data: createdRoom, status: true})
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: "Server Error", status: false})
