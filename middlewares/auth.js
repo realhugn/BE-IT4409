@@ -23,11 +23,11 @@ export const isAuth = async (req, res, next) => {
     try {
         let isOwner = await ownerService.getOwner(req.user.userId)
         let loggedInUserId = req.params.id;
-        if ( isOwner.role !== 'owner')
+        if ( isOwner.role == 'owner')
             next()
         else if (!loggedInUserId || !req.user.userId || loggedInUserId != req.user.userId) 
             return res.status(403).json({ msg: "You are not authenticate" });
-        next()
+        else next()
     } catch (error) {
         return res.status(404).json({msg: error});
     }

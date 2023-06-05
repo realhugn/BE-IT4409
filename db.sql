@@ -39,7 +39,7 @@ create table house (
     description varchar(200),
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    Foreign key (owner_id) REFERENCES owner(id)
+    Foreign key (owner_id) REFERENCES owner(id) ON DELETE CASCADE
 );
 
 create table room (
@@ -50,7 +50,7 @@ create table room (
     maxUser INT,
     description varchar(200),
     status enum("AVAILABLE", "UNAVAILABLE"),
-    Foreign key (house_id) REFERENCES house(id)
+    Foreign key (house_id) REFERENCES house(id) ON DELETE CASCADE
 );
 
 create table deposit (
@@ -61,22 +61,22 @@ create table deposit (
     status boolean,
     start_time timestamp DEFAULT CURRENT_TIMESTAMP,
     end_time timestamp NOT NULL,
-    Foreign key (renter_id) REFERENCES renter(id),
-    Foreign key (room_id) REFERENCES room(id)
+    Foreign key (renter_id) REFERENCES renter(id)  ON DELETE CASCADE,
+    Foreign key (room_id) REFERENCES room(id)  ON DELETE CASCADE
 );
 
 create table covenant (
     id INT  AUTO_INCREMENT PRIMARY KEY,
-    room_id INT NOT NULL REFERENCES room(id),
-    renter_id INT NOT NULL REFERENCES renter(id),
+    room_id INT NOT NULL ,
+    renter_id INT NOT NULL,
     duration INT NOT NULL,
     pay_time INT NOT NULL,
     pre_pay INT,
     note varchar(200),
     started_date timestamp DEFAULT CURRENT_TIMESTAMP,
     end_date timestamp DEFAULT CURRENT_TIMESTAMP,
-    Foreign key (room_id) REFERENCES room(id),
-    Foreign key (renter_id) REFERENCES renter(id)
+    Foreign key (room_id) REFERENCES room(id)  ON DELETE CASCADE,
+    Foreign key (renter_id) REFERENCES renter(id) ON DELETE CASCADE
 );
 
 create table bill (
@@ -85,17 +85,23 @@ create table bill (
     total_price INT NOT NULL,
     debt INT,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-     Foreign key (covenant_id) REFERENCES covenant(id)
+     Foreign key (covenant_id) REFERENCES covenant(id)  ON DELETE CASCADE
 );
 
 create table service(
     id INT  AUTO_INCREMENT PRIMARY KEY,
-    room_id INT NOT NULL REFERENCES room(id),
     name varchar(100) NOT NULL,
     cost INT NOT NULL,
     unit varchar(30) NOT NULL,
-    description varchar(200),
-    Foreign key (room_id) REFERENCES room(id)
+    description varchar(200)
+);
+
+create table service_room (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    room_id INT NOT NULL ,
+    service_id INT NOT NULL,
+    foreign key (room_id) REFERENCES room(id)  ON DELETE CASCADE,
+    foreign key (service_id) REFERENCES service(id)  ON DELETE CASCADE
 );
 
 create table bill_service (
@@ -103,8 +109,8 @@ create table bill_service (
     service_id INT NOT NULL REFERENCES service(id),
     bill_id INT NOT NULL REFERENCES  bill(id),
     num INT NOT NULL,
-    Foreign key (bill_id) REFERENCES bill(id),
-    Foreign key (service_id) REFERENCES service(id)
+    Foreign key (bill_id) REFERENCES bill(id)  ON DELETE CASCADE,
+    Foreign key (service_id) REFERENCES service(id)  ON DELETE CASCADE
 );
 
 -- DELIMITER $$
