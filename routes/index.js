@@ -6,6 +6,7 @@ import renterRoute from "./renter"
 import roomRoute from  './room'
 import serviceService from './service'
 
+
 const route = express.Router()
 route.use('/', authRoute)
 route.use('/user', ownerRoute)
