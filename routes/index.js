@@ -4,7 +4,8 @@ import ownerRoute from './owner'
 import houseRoute from './house'
 import renterRoute from "./renter"
 import roomRoute from  './room'
-import serviceService from './service'
+import serviceRoute from './service'
+import covenantRoute from './covenant'
 
 
 const route = express.Router()
@@ -13,6 +14,7 @@ route.use('/user', ownerRoute)
 route.use('/house', houseRoute)
 route.use('/renter', renterRoute)
 route.use('/room', roomRoute)
-route.use('/service', serviceService)
+route.use('/service', serviceRoute)
+route.use('/covenant', covenantRoute)
 
 export {route}
