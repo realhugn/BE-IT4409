@@ -3,8 +3,8 @@ import serviceService from '../services/serviceService'
 export const createService = async (req,res,next) => {
     try {
         const {name, cost, unit,description } = req.body
-        const createdHouse = await serviceService.createService({name, cost, unit,description})
-        res.status(200).json({msg:"Created success", data: createdHouse, status: true})
+        const createdService = await serviceService.createService({name, cost, unit,description})
+        res.status(200).json({msg:"Created success", data: createdService, status: true})
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: "Server Error", status: false})

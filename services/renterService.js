@@ -19,9 +19,9 @@ class RenterService {
         }
     }
 
-    async find(name) {
+    async find(phone) {
         try {
-            const renter = await Renter.find(name)
+            const renter = await Renter.find(phone)
             return renter
         } catch (error) {
             throw error
