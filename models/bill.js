@@ -63,7 +63,7 @@ class Bill {
             `
             const rs = await db.query(statement, [house_id])
             if (rs[0].length > 0) {
-                return rs
+                return rs[0]
             } else {
                 return []
             }
