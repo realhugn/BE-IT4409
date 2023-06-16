@@ -21,8 +21,8 @@ export const signUp = async (req,res,next) =>{
 export const signIn = async (req,res,next) => {
     try {
         const {phone,password} = req.body
-        const isExist = await ownerService.find(phone) && await renterService.find(phone)
-        if(isExist == false) return res.status(400).json({msg: "User not exists", status: false})
+        const isExist = (await ownerService.find(phone)) || (await renterService.find(phone))
+        if(isExist == null) return res.status(400).json({msg: "User not exists", status: false})
         const user = await renterService.find(phone) || await ownerService.find(phone)
         const isValidPassword = await comparePassowrd(password, user.password)
         if(!isValidPassword) return res.status(403).json({msg: "Wrong password", status: false})

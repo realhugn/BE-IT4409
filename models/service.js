@@ -18,8 +18,8 @@ class Service {
 
     async create(data) {
         try {
-            const values = [ data.name,data.cost, data.unit,data.description]
-            const statement = `insert into service (name, cost, unit,description) values (?,?,?,?);`
+            const values = [ data.name,data.cost, data.unit,data.description, data.house_id]
+            const statement = `insert into service (name, cost, unit,description,house_id) values (?,?,?,?,?);`
             const rs = await db.query(statement, values)
             return await this.get(rs[0].insertId)
         } catch (error) {
@@ -27,10 +27,10 @@ class Service {
         }
     }
 
-    async all() {
+    async all(id) {
         try {
-            const statement = `select * from service`;
-            const rs = await db.query(statement)
+            const statement = `select * from service where house_id = ?`;
+            const rs = await db.query(statement,[id])
             return rs[0]
         } catch (error) {
             throw error

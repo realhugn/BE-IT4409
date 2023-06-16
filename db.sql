@@ -85,7 +85,7 @@ create table bill (
     total_price INT NOT NULL,
     debt INT,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-     Foreign key (covenant_id) REFERENCES covenant(id)  ON DELETE CASCADE
+    Foreign key (covenant_id) REFERENCES covenant(id)  ON DELETE CASCADE
 );
 
 create table service(
@@ -93,7 +93,9 @@ create table service(
     name varchar(100) NOT NULL,
     cost INT NOT NULL,
     unit varchar(30) NOT NULL,
-    description varchar(200)
+    house_id INT NOT NULL ,
+    description varchar(200),
+    Foreign key (house_id) REFERENCES house(id)  ON DELETE CASCADE
 );
 
 create table service_room (

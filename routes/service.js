@@ -3,7 +3,7 @@ import { verifyTokenUser, isOwner } from '../middlewares/auth'
 import { addServiceToRoom, allServices, createService, deleteService, getService, removeServiceInRoom, servicesInRoom, updateService } from '../controller/service'
 
 const route = express.Router()
-route.get("/",verifyTokenUser,isOwner, allServices)
+route.get("/house/:id",verifyTokenUser,isOwner, allServices)
 route.get("/room/:id",verifyTokenUser, isOwner,  servicesInRoom )
 route.post("/",verifyTokenUser, isOwner, createService)
 route.get('/:id',verifyTokenUser, isOwner, getService)
