@@ -67,8 +67,8 @@ create table deposit (
 
 create table covenant (
     id INT  AUTO_INCREMENT PRIMARY KEY,
-    room_id INT NOT NULL ,
-    renter_id INT NOT NULL,
+    room_id INT NOT NULL unique,
+    renter_id INT NOT NULL unique,
     duration INT NOT NULL,
     pay_time INT NOT NULL,
     pre_pay INT,
