@@ -38,8 +38,12 @@ export const updateHouse = async(req,res,next) => {
     try {
         const {name, description, location } = req.body
         const id = req.params.id
+        const house = await houseService.getHouse(id)
+        const isBelong = house.owner_id == req.user.userId
+        if (!isBelong) 
+            return res.status(404).json({msg: "Fail", status: false})
         const updatedHouse = await houseService.updateHouse({name, description, location, id})
-        if(!updatedHouse) return res.status(404).json({msg: "Not Found", status: false})
+        if(!updatedHouse) return res.status(500).json({msg: "Server Error", status: false})
         res.status(200).json({msg:"Updated", data: updatedHouse, status: true})
     } catch (error) {
         console.log(error)
@@ -50,6 +54,10 @@ export const updateHouse = async(req,res,next) => {
 export const deleteHouse = async(req,res,next) => {
     try {
         const id = req.params.id
+        const house = await houseService.getHouse(id)
+        const isBelong = house.owner_id == req.user.userId
+        if (!isBelong) 
+            return res.status(404).json({msg: "Fail", status: false})
         const deletedHouse = await houseService.deleteHouse(id)
         res.status(200).json({msg:"Deleted", status: true})
     } catch (error) {
@@ -60,8 +68,8 @@ export const deleteHouse = async(req,res,next) => {
 
 export const getOwnerHouse = async(req,res,next) => {
     try {
-        const house_id = req.params.id
-        const houses = await houseService.getAllOwnerHouse(house_id)
+        const owner_id = req.params.id
+        const houses = await houseService.getAllOwnerHouse(owner_id)
         res.status(200).json({msg:"All", data: houses, status:  true})
     } catch (error) {
         console.log(error)

@@ -19,9 +19,9 @@ class ServiceService {
         }
     }
 
-    async allServices() {
+    async allServices(id) {
         try {
-            const services = await Service.all()
+            const services = await Service.all(id)
             return services
         } catch (error) {
             throw error
