@@ -85,7 +85,8 @@ create table bill (
     total_price INT NOT NULL,
     debt INT,
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-    Foreign key (covenant_id) REFERENCES covenant(id)  ON DELETE CASCADE
+    updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
+     Foreign key (covenant_id) REFERENCES covenant(id)  ON DELETE CASCADE
 );
 
 create table service(
