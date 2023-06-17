@@ -20,10 +20,9 @@ export const getRenter = async (req,res,next) =>{
 
 export const updateRenter = async(req,res,next) => {
     try {
-        const {phone,password, name, string, birthday, address, email, gender} = req.body
+        const {phone, name, string, birthday, address, email, gender} = req.body
         const id = req.params.id
-        const hashPassword = await bcrypt.hash(password,8)
-        const updatedUser = await renterService.updateProfile({phone, password:hashPassword, name, string, birthday, address, email, gender, id})
+        const updatedUser = await renterService.updateProfile({phone, name, string, birthday, address, email, gender, id})
         if(!updatedUser) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"Updated User", data: updatedUser, status: true})
     } catch (error) {
@@ -54,5 +53,24 @@ export const createRenter = async(req,res,next) => {
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: "Created Fail", status: false})
+    }
+}
+
+export const updatePassword = async (req,res, next) => {
+    try {
+        const {newPassword, oldPassword} = req.body
+        const id = req.params.id
+        if(id != req.user.userId) 
+            return res.status(404).json({msg: "Fail", status: false})
+        const user = await renterService.getRenter(id)
+        if(!user) return res.status(404).json({msg: "User Not Found", status: false})
+        const isValidPassword = await comparePassowrd(oldPassword, user.password);
+        if(!isValidPassword) return res.status(403).json({msg: "Wrong old password", status: false})
+        const hashPassword = await bcrypt.hash(newPassword,8)
+        await renterService.updatePassword({id, password: hashPassword})
+        res.status(200).json({msg:"Updated Password", status: true})
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({msg: "Server Error", status: false})
     }
 }

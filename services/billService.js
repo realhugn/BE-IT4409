@@ -1,11 +1,12 @@
 import Bill from '../models/bill'
 class BillService {
-    getHouseBill(house_id) {
-        return Bill.getBillsByHouseId(house_id)
+    async getHouseBill(house_id) {
+        return await Bill.getBillsByHouseId(house_id)
     }
-    getBillById(id) {
-        return Bill.get(id)
+    async getBillById(id) {
+        return  await Bill.get(id)
     }
+
     async updateBill(id, data) {
         const isExist = await Bill.get(id)
         if (!isExist) {
@@ -20,6 +21,12 @@ class BillService {
             throw new Error("not found")
         }
         return Bill.delete(id)
+    }
+    async createBill(data) {
+        return Bill.create(data)
+    }
+    async getBillByRenter(renter_id) {
+        return Bill.getBillByRenter(renter_id)
     }
 }
 

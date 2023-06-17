@@ -12,7 +12,7 @@ export const getHouseBill = async (req, res, next) => {
 export const getSingleBillInfo = async (req, res, next) => {
     try {
         const bill_id=req.params.id;
-        const result=await billService.getBillById(bill_id)
+        const result= await billService.getBillById(bill_id)
         res.status(200).json({ msg: "get success", data: result, status: true })
     } catch (error) {
         console.log(error)
@@ -34,8 +34,30 @@ export const updateBill = async (req, res, next) => {
 export const deleteBill = async (req, res, next) => {
     try {
         const bill_id=req.params.id;
-        const result=await billService.deleteBill(bill_id)
+        const result = await billService.deleteBill(bill_id)
         res.status(200).json({ msg: "delete success", data: result, status: true })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ msg: error.message, status: false })
+    }
+}
+
+export const getBillByRenter = async (req,res,next) => {
+    try {
+        const renter_id = req.params.id
+        const rs = await billService.getBillByRenter(renter_id)
+        res.status(200).json({ msg: "delete success", data: rs, status: true })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ msg: error.message, status: false })
+    }
+}
+
+export const createBill = async (req,res,next) => {
+    try {
+        const {covenant_id,debt,services} = req.body
+        const rs = await billService.createBill({covenant_id,debt,services})
+        res.status(200).json({ msg: "create success", data: rs, status: true })
     } catch (error) {
         console.log(error)
         return res.status(500).json({ msg: error.message, status: false })

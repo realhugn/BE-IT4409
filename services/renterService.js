@@ -50,6 +50,17 @@ class RenterService {
             throw error
         }
     }
+
+    async updatePassword(data) {
+        try {
+            const isExist = await this.getRenter(data.id)
+            if(!isExist) 
+                return null
+            return await Renter.update_pass(data)
+        } catch (error) {
+            
+        }
+    }
 }
 
 export default new RenterService()

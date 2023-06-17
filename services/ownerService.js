@@ -43,11 +43,21 @@ class OwnerService {
         try {
             const isExist = await this.getOwner(id)
             if(!isExist) 
-                return false
-            await Owner.delete(id)
-            return true
+                return null
+            return await Owner.delete(id)
         } catch (error) {
             throw error
+        }
+    }
+
+    async updatePassword(data) {
+        try {
+            const isExist = await this.getOwner(data.id)
+            if(!isExist) 
+                return null
+            return await Owner.update_pass(data)
+        } catch (error) {
+            
         }
     }
 }

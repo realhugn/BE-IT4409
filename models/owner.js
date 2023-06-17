@@ -45,8 +45,8 @@ class Owner {
 
     async updateProfile(data) {
         try {
-            const values = [ data.phone, data.password, data.name, data.birthday,data.address,data.email,data.id]
-            const statement = `update owner set phone = ?,password = ?,name = ?, birthday =DATE(?), address=?,email =? ,updated_at = now() where id = ?;`
+            const values = [ data.phone, data.name, data.birthday,data.address,data.email,data.id]
+            const statement = `update owner set phone = ?,name = ?, birthday =DATE(?), address=?,email =? ,updated_at = now() where id = ?;`
             await db.query(statement, values)
             return await this.get(data.id)
         } catch (error) {
@@ -72,6 +72,17 @@ class Owner {
             return await this.get(id)
         } catch (error) {
             
+        }
+    }
+
+    async update_pass(data) {
+        try {
+            const values = [ data.password, data.id]
+            const statement = `update owner set password = ?, updated_at = now() where id = ?;`
+            await db.query(statement, values)
+            return await this.get(data.id)
+        } catch (error) {
+            throw error
         }
     }
 
