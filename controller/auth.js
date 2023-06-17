@@ -10,7 +10,7 @@ export const signUp = async (req,res,next) =>{
         if(isExist) return res.status(400).json({msg: "User already exist", status: false})
         const hashPassword = await bcrypt.hash(password,8)
         const newOwner = await ownerService.createOwner({name,password: hashPassword,phone,birthday,address,email})
-        const accessToken = SignToken(newOwner.id)
+        const accessToken = SignToken(newOwner.id, 'owner')
         res.status(200).json({msg:"Register success", status: true, data: {newOwner, token: accessToken}})
     } catch (error) {
         console.log(error)
@@ -26,7 +26,7 @@ export const signIn = async (req,res,next) => {
         const user = await renterService.find(phone) || await ownerService.find(phone)
         const isValidPassword = await comparePassowrd(password, user.password)
         if(!isValidPassword) return res.status(403).json({msg: "Wrong password", status: false})
-        const accessToken = SignToken(user.id)
+        const accessToken = SignToken(user.id, user.role)
         res.status(200).json({msg: "Login success", status: true, data : {user, token: accessToken}})
     } catch (error) {
         console.log(error)

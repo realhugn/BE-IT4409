@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 
-export const SignToken = (id) => {
+export const SignToken = (id,role) => {
     return jwt.sign({
-        userId : id
+        userId : id,
+        role
     },process.env.JWT_SECRET,{expiresIn : '30d'})
 } 
 

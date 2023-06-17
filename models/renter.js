@@ -45,8 +45,8 @@ class Renter {
 
     async update(data) {
         try {
-            const values = [ data.phone, data.password, data.name, data.birthday,data.address,data.email,data.gender,data.id]
-            const statement = `update renter set phone = ?,password = ?,name = ?, birthday =DATE(?), address=?,email =?,gender = ? ,updated_at = now() where id = ?;`
+            const values = [ data.phone, data.name, data.birthday,data.address,data.email,data.gender,data.id]
+            const statement = `update renter set phone = ?,name = ?, birthday =DATE(?), address=?,email =?,gender = ? ,updated_at = now() where id = ?;`
             await db.query(statement, values)
             return await this.get(data.id)
         } catch (error) {

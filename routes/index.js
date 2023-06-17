@@ -7,6 +7,7 @@ import roomRoute from  './room'
 import serviceRoute from './service'
 import covenantRoute from './covenant'
 import billRoute from './bill'
+import depositRoute from './deposit'
 
 const route = express.Router()
 route.use('/', authRoute)
@@ -17,4 +18,5 @@ route.use('/room', roomRoute)
 route.use('/service', serviceRoute)
 route.use('/covenant', covenantRoute)
 route.use('/bill',billRoute)
+route.use('/deposit', depositRoute)
 export {route}

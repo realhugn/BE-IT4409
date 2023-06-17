@@ -8,7 +8,7 @@ export const getRenter = async (req,res,next) =>{
     try {
         const id = req.params.id
         const user = await renterService.getRenter(id)
-        if(user.id != req.user.userId) 
+        if(user.id != req.user.userId ) 
             return res.status(404).json({msg: "Fail", status: false})
         if(!user) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"User Found", data: user, status: true})
@@ -22,6 +22,8 @@ export const updateRenter = async(req,res,next) => {
     try {
         const {phone, name, string, birthday, address, email, gender} = req.body
         const id = req.params.id
+        if(req.user.role != 'user') 
+            return res.status(404).json({msg: "Fail", status: false})
         const updatedUser = await renterService.updateProfile({phone, name, string, birthday, address, email, gender, id})
         if(!updatedUser) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"Updated User", data: updatedUser, status: true})
@@ -60,7 +62,7 @@ export const updatePassword = async (req,res, next) => {
     try {
         const {newPassword, oldPassword} = req.body
         const id = req.params.id
-        if(id != req.user.userId) 
+        if(id != req.user.userId || req.user.role != 'renter') 
             return res.status(404).json({msg: "Fail", status: false})
         const user = await renterService.getRenter(id)
         if(!user) return res.status(404).json({msg: "User Not Found", status: false})
