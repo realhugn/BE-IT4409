@@ -101,6 +101,18 @@ export const servicesInRoom = async (req,res,next) => {
     }
 }
 
+export const roomsInService = async (req,res,next) => {
+    try {
+        const id = req.params.id
+        const service = await serviceService.roomsInService(id)
+            
+        res.status(200).json({msg:"All", data:service, status: true})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "Server Error", status: false})
+    }
+}
+
 export const addServiceToRoom = async (req,res,next) => {
     try {
         const room_id = req.params.id

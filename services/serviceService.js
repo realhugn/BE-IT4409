@@ -59,6 +59,16 @@ class ServiceService {
             throw error
         }
     }
+
+    async roomsInService(id) {
+        try {
+            const service = await Service.rooms_in_service(id)
+
+            return service
+        } catch (error) {
+            throw error
+        }
+    }
     
     async addServiceToRoom(data) {
         try {
