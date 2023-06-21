@@ -68,6 +68,26 @@ class Service {
         }
     }
 
+    async rooms_in_service(id) {
+        try{
+            const statement = `SELECT service.id, service.name, service.cost, service.unit, service.house_id, service.description,
+            COALESCE(
+                JSON_ARRAYAGG(
+                    JSON_OBJECT('id', room.id, 'name', room.name, 'cost', room.cost, 'maxUser', room.maxUser, 'status', room.status, 'description', room.description)
+                ),
+                JSON_ARRAY()
+            ) AS rooms
+            FROM service
+            LEFT JOIN service_room ON service.id = service_room.service_id
+            LEFT JOIN room ON room.id = service_room.room_id
+            WHERE service.id = ?`;
+            const rs = await db.query(statement, [id])
+            return rs[0][0]
+        } catch (error) {
+            throw error
+        }
+    }
+
     async add_service_to_room(data) {
         try {
             const values = [data.room_id, data.id_services]
