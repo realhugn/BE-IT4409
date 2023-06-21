@@ -14,7 +14,7 @@ export const signUp = async (req,res,next) =>{
         res.status(200).json({msg:"Register success", status: true, data: {newOwner, token: accessToken}})
     } catch (error) {
         console.log(error)
-        return res.status(200).json({msg: "Server Error", status: false})
+        return res.status(200).json({msg: "Create account fail", status: false})
     }
 }
 
@@ -30,6 +30,6 @@ export const signIn = async (req,res,next) => {
         res.status(200).json({msg: "Login success", status: true, data : {user, token: accessToken}})
     } catch (error) {
         console.log(error)
-        return res.status(200).json({msg: "Server Error", status: false})
+        return res.status(200).json({msg: "Sign in Fail", status: false})
     }
 }

@@ -7,8 +7,9 @@ export const getOwner = async (req,res,next) =>{
         const id = req.params.id
         const user = await ownerService.getOwner(id)
         if(!user) return res.status(404).json({msg: "User Not Found", status: false})
-        if(id != req.user.userId || req.user.role == 'owner') 
-            return res.status(404).json({msg: "Fail", status: false})
+        console.log(req.user)
+        if(id != req.user.userId || req.user.role != 'owner') 
+            return res.status(404).json({msg: "Fail to load User", status: false})
         res.status(200).json({msg:"User Found", data: user, status: true})
     } catch (error) {
         console.log(error)
