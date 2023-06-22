@@ -58,7 +58,15 @@ class RenterService {
                 return null
             return await Renter.update_pass(data)
         } catch (error) {
-            
+            throw error
+        }
+    }
+
+    async renterInHouse(house_id) {
+        try {
+            return await Renter.renter_in_house(house_id)
+        } catch (error) {
+            throw error
         }
     }
 }

@@ -1,4 +1,5 @@
 import {db} from '../configs/db.js'
+import Room from './room.js'
 
 class Renter {
     async create(data) {
@@ -70,6 +71,22 @@ class Renter {
             const statement = `update renter set password = ?, updated_at = now() where id = ?;`
             await db.query(statement, values)
             return await this.get(data.id)
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async renter_in_house(house_id) {
+        try {
+            const room = await Room.all(house_id);
+            let results = []
+            const statement = `select renter.*, room.name as room_name from renter, covenant, room where renter.id = covenant.renter_id and covenant.room_id = room.id and room.id = ?;`
+            for (let i = 0 ;i < room.length ; i++) {
+                const rs = await db.query(statement, [room[i].id]);
+                if (rs[0][0] != null)
+                    results.push(rs[0][0])
+            }
+            return results  ;
         } catch (error) {
             throw error
         }
