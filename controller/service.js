@@ -121,12 +121,13 @@ export const addServiceToRoom = async (req,res,next) => {
         const isBelong = house.owner_id == req.user.userId
         if (!isBelong) 
             return res.status(404).json({msg: "Fail", status: false})      
-        const {id_services} = req.body
+        let {id_services} = req.body
         const existedServices = await serviceService.servicesInRoom(room_id)
-        for(let x of existedServices) {
-            if(id_services.includes(x.id)) {
-                return res.status(500).json({msg: `Service ${x.id} Exist`, status: false}) 
-            }
+        console.log(existedServices)
+        // check if service is existed in room delete it in id_services
+        if(existedServices.length > 0){
+            const existedServicesId = existedServices.map(service => service.id)
+            id_services = id_services.filter(id => !existedServicesId.includes(id))
         }
         const services = await serviceService.addServiceToRoom({room_id, id_services})
         res.status(201).json({msg:"All", data:services, status: true})
