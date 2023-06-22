@@ -1,6 +1,7 @@
 import renterService from '../services/renterService'
 import bcrypt from 'bcrypt'
 import { SignToken } from '../utils'
+import houseService from '../services/houseService'
 
 
 
@@ -71,6 +72,20 @@ export const updatePassword = async (req,res, next) => {
         const hashPassword = await bcrypt.hash(newPassword,8)
         await renterService.updatePassword({id, password: hashPassword})
         res.status(200).json({msg:"Updated Password", status: true})
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({msg: "Server Error", status: false})
+    }
+}
+
+export const renterInHouse = async(req,res,next) => {
+    try {
+        const owner_id = req.user.userId
+        const house_id = req.params.id
+        const house = await houseService.getHouse(house_id)
+        if(owner_id != house.owner_id) return res.status(300).json({msg: "Unauthorized", status : false})
+        const renterRoom = await renterService.renterInHouse(house_id);
+        res.status(200).json({msg:"all renter in house" , status:true, data: renterRoom})
     } catch (error) {
         console.log(error)
         return res.status(200).json({msg: "Server Error", status: false})

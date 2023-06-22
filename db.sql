@@ -46,6 +46,7 @@ create table room (
     id INT  AUTO_INCREMENT PRIMARY KEY,
     house_id INT NOT NULL,
     name varchar(100) NOT NULL,
+    status enum("EMPTY_ROOM", "USING_ROOM", "DEPOSIT_ROOM", "STOP_ROOM") DEFAULT "EMPTY_ROOM",
     cost INT NOT NULL,
     maxUser INT,
     description varchar(200),
