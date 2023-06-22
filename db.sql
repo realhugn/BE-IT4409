@@ -60,7 +60,7 @@ create table deposit (
     tien_coc INT NOT NULL,
     status boolean,
     start_time timestamp DEFAULT CURRENT_TIMESTAMP,
-    end_time timestamp NOT NULL,
+    end_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     Foreign key (renter_id) REFERENCES renter(id)  ON DELETE CASCADE,
     Foreign key (room_id) REFERENCES room(id)  ON DELETE CASCADE
 );
