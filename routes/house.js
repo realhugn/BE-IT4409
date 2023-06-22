@@ -3,7 +3,7 @@ import { getHouse, getOwnerHouse ,allHouse, updateHouse, deleteHouse, createHous
 import { verifyTokenUser,isAuth, isOwner } from '../middlewares/auth'
 
 const route = express.Router()
-route.get("/", allHouse )
+//route.get("/", allHouse )
 route.post("/",verifyTokenUser, isOwner, createHouse)
 route.get('/:id', getHouse)
 route.get("/owner/:id",getOwnerHouse )
