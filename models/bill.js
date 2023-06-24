@@ -58,8 +58,8 @@ class Bill {
 
     async update(bill_id,data) {
         try {
-            const values = [ data.covenant_id, data?.debt ?? 0, bill_id]
-            const statement = `update bill set covenant_id = ?, debt = ?, updated_at = now() where id = ? ;`
+            const values = [ data.covenant_id, data?.debt ?? 0, data.status, bill_id]
+            const statement = `update bill set covenant_id = ?, debt = ?,status= ? updated_at = now() where id = ? ;`
             await db.query(statement, values)
             for (let i = 0 ; i < data.services.length ;i ++) {
                 await db.query(`update bill_service set num = ? where service_id =? and bill_id = ?`, [data.services[i].num, data.services[i].id, bill_id])
@@ -70,6 +70,7 @@ class Bill {
             throw error
         }
     }
+    
 
     async delete(id) {
         try {
