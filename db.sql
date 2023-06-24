@@ -84,6 +84,7 @@ create table bill (
     covenant_id INT NOT NULL REFERENCES covenant(id),
     total_price INT NOT NULL,
     debt INT,
+    paid INT,
     status enum("UNPAID", "PENDING", "PAID") DEFAULT "UNPAID",
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP,
