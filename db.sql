@@ -50,7 +50,6 @@ create table room (
     cost INT NOT NULL,
     maxUser INT,
     description varchar(200),
-    status enum("AVAILABLE", "UNAVAILABLE"),
     Foreign key (house_id) REFERENCES house(id) ON DELETE CASCADE
 );
 
