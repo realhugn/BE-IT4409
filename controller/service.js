@@ -109,7 +109,7 @@ export const roomsInService = async (req,res,next) => {
         res.status(200).json({msg:"All", data:service, status: true})
     } catch (error) {
         console.log(error)
-        return res.status(500).json({msg: "Server Error", status: false})
+        return res.status(500).json({msg: error, status: false})
     }
 }
 
@@ -132,7 +132,7 @@ export const addServiceToRoom = async (req,res,next) => {
         res.status(201).json({msg:"All", data:services, status: true})
     } catch (error) {
         console.log(error)
-        return res.status(500).json({msg: "Server Error", status: false})
+        return res.status(500).json({msg: "Add service to room fail", status: false})
     }
 }
  
@@ -144,8 +144,8 @@ export const removeServiceInRoom = async (req, res, next) => {
         const isBelong = house.owner_id == req.user.userId
         if (!isBelong) 
             return res.status(404).json({msg: "Fail", status: false})     
-         const {service_id} = req.body
-        await serviceService.removeServiceInRoom({room_id, service_id})
+        
+        await serviceService.removeServiceInRoom(room_id)
         res.status(201).json({msg:"Removed", status: true})
     } catch (error) {
         console.log(error)

@@ -5,11 +5,11 @@ import renterService from '../services/renterService'
 
 export const signUp = async (req,res,next) =>{
     try {
-        const {name, password, phone, birthday, address, email} = req.body
+        const {name, password, phone, birthday, address, email, gender} = req.body
         const isExist = await ownerService.find(phone)
         if(isExist) return res.status(400).json({msg: "User already exist", status: false})
         const hashPassword = await bcrypt.hash(password,8)
-        const newOwner = await ownerService.createOwner({name,password: hashPassword,phone,birthday,address,email})
+        const newOwner = await ownerService.createOwner({name,password: hashPassword,phone,birthday,address,email, gender})
         const accessToken = SignToken(newOwner.id, 'owner')
         res.status(200).json({msg:"Register success", status: true, data: {newOwner, token: accessToken}})
     } catch (error) {

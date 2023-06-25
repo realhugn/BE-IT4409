@@ -23,6 +23,24 @@ export const createCovenant = async (req,res,next) => {
     }
 }
 
+export const updateCovenant = async (req, res, next) => {
+    try {
+        const {duration,pay_time,pre_pay, note, started_date, end_date} = req.body
+        const id = req.params.id
+
+        const updateCovenant = await covenantService.updateCovenant({duration,pay_time,pre_pay, note, started_date, end_date, id})
+        
+        res.status(200).json({
+            msg:"Update success", 
+            data: updateCovenant, 
+            status: true
+        })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: error, status: false})
+    }
+}
+
 export const getCovenant = async (req,res,next) =>{
     try {
         const id = req.params.id

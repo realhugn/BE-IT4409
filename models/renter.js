@@ -4,8 +4,8 @@ import Room from './room.js'
 class Renter {
     async create(data) {
         try {
-            const values = [data.name, data.phone, data.birthday, data.address, data.email,data.gender]
-            const statement = `insert into renter (name, phone, birthday, address ,email, gender, role) values (?,?,?,DATE(?),?,?,?, "renter");`
+            const values = [data.name, data.phone, data.password, data.birthday, data.address, data.email,data.gender]
+            const statement = `insert into renter (name, phone, password, birthday, address ,email, gender, role) values (?,?,?,DATE(?),?,?,?, "renter");`
             await db.query(statement, values)
             const rs =await this.find(data.phone)
             return rs
@@ -20,6 +20,8 @@ class Renter {
             const statement = `select * from renter where id = ?;`
             const rs = await db.query(statement, values)
             if(rs[0].length > 0) {
+                if (rs[0][0]['birthday']) 
+                    rs[0][0]['birthday'] = new Date(rs[0][0].birthday).toLocaleDateString("sv-SE")
                 return rs[0][0]
             } else {
                 return null
@@ -35,6 +37,8 @@ class Renter {
             const statement = `select * from renter where phone = ?;`
             const rs = await db.query(statement, values)
             if(rs[0].length > 0) {
+                if (rs[0][0]['birthday']) 
+                    rs[0][0]['birthday'] = new Date(rs[0][0].birthday).toLocaleDateString("sv-SE")
                 return rs[0][0]
             } else {
                 return null
@@ -83,8 +87,12 @@ class Renter {
             const statement = `select renter.*, room.name as room_name from renter, covenant, room where renter.id = covenant.renter_id and covenant.room_id = room.id and room.id = ?;`
             for (let i = 0 ;i < room.length ; i++) {
                 const rs = await db.query(statement, [room[i].id]);
-                if (rs[0][0] != null)
+                if (rs[0][0] != null){
+                    if (rs[0][0]['birthday']) 
+                        rs[0][0]['birthday'] = new Date(rs[0][0].birthday).toLocaleDateString("sv-SE")
                     results.push(rs[0][0])
+                }
+                    
             }
             return results  ;
         } catch (error) {

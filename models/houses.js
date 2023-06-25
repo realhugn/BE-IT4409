@@ -5,6 +5,7 @@ class House {
         try {
             const statement = `select * from house where id = ?`
             const rs = await db.query(statement, [id])
+            
             if(rs[0].length > 0) {
                 return rs[0][0]
             } else {
@@ -62,11 +63,8 @@ class House {
         try {
             const statement = `select * from house where owner_id = ?`
             const rs = await db.query(statement, [owner_id])
-            if(rs[0].length > 0) {
-                return rs[0]
-            } else {
-                return null
-            }
+            return rs[0]
+
         } catch (error) {
             throw error
         }
