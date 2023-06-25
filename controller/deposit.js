@@ -30,8 +30,8 @@ export const getDeposit = async(req,res,next) => {
 
 export const updateDeposit = async (req,res,next) => {
     try {
-        const {renter_id, room_id, tien_coc, status, start_time, end_time} = req.body
-        const rs = await depositService.updateDeposit({renter_id, room_id, tien_coc, status, start_time, end_time, id: req.params.id})
+        const {tien_coc, status, start_time, end_time} = req.body
+        const rs = await depositService.updateDeposit({tien_coc, status, start_time, end_time, id: req.params.id})
         if(rs == null) return res.status(404).json({msg: 'Not Found', status: false})
         res.status(200).json({msg: 'update Success', status: true, data: rs})
     } catch (error) {

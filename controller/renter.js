@@ -23,8 +23,8 @@ export const updateRenter = async(req,res,next) => {
     try {
         const {phone, name, string, birthday, address, email, gender} = req.body
         const id = req.params.id
-        if(req.user.role != 'user') 
-            return res.status(404).json({msg: "Fail", status: false})
+        // if(req.user.role != 'user') 
+        //     return res.status(404).json({msg: "Fail", status: false})
         const updatedUser = await renterService.updateProfile({phone, name, string, birthday, address, email, gender, id})
         if(!updatedUser) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"Updated User", data: updatedUser, status: true})
@@ -48,8 +48,9 @@ export const deleteRenter = async(req,res,next) => {
 
 export const createRenter = async(req,res,next) => {
     try {
-        const {phone,password,name,birthday, gender,address, email} = req.body
-        const hashPassword = await bcrypt.hash(password,8)
+        const {phone,name,birthday, gender,address, email} = req.body
+        const hashPassword = await bcrypt.hash("12345678", 8) //Để mật khẩu mặc định cho renter
+        
         const newRenter = await renterService.createRenter({name,password: hashPassword,phone,birthday,address,email,gender})
         const accessToken = SignToken(newRenter.id)
         res.status(200).json({msg:"Register success", status: true, data: {newRenter, token: accessToken}})

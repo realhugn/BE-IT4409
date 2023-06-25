@@ -58,11 +58,14 @@ class Service {
         }
     }
 
-    async services_in_room(id) {
+    async services_in_room(id) { //chỉ cần lấy id của service in room thôi
         try{
-            const statement = `Select service.* from service, service_room , room where room.id = service_room.room_id and service.id = service_room.service_id and room.id =  ?;`
+            const statement = `Select service_room.service_id from service_room , room where room.id = service_room.room_id and room.id = ?;`
             const rs = await db.query(statement, [id])
-            return rs[0]
+            let services = []
+            for (let i = 0; i < rs[0].length; i++)
+                services.push(rs[0][i].service_id)
+            return services
         } catch (error) {
             throw error
         }
@@ -73,7 +76,7 @@ class Service {
             const statement = `SELECT service.id, service.name, service.cost, service.unit, service.house_id, service.description,
             COALESCE(
                 JSON_ARRAYAGG(
-                    JSON_OBJECT('id', room.id, 'name', room.name, 'cost', room.cost, 'maxUser', room.maxUser, 'status', room.status, 'description', room.description)
+                    JSON_OBJECT('id', room.id, 'name', room.name, 'cost', room.cost, 'max_user', room.max_user, 'status', room.status, 'description', room.description)
                 ),
                 JSON_ARRAY()
             ) AS rooms
@@ -90,7 +93,7 @@ class Service {
 
     async add_service_to_room(data) {
         try {
-            const values = [data.room_id, data.id_services]
+            console.log(data)
             const statement = `insert into service_room (room_id, service_id) values (?,?);`
             for (let x of data.id_services) {
                 await db.query(statement, [data.room_id, x])
@@ -101,11 +104,11 @@ class Service {
         }
     }
 
-    async remove_service_in_room (data) {
+    async remove_service_in_room (data) { //xóa hết service trong room 
         try {
-            const values = [data.room_id, data.service_id]
-            const statement = `delete from service_room where room_id = ? and service_id = ?;`
-            return await db.query(statement, values);
+            const statement = `delete from service_room where room_id = ?;`
+
+            return await db.query(statement, [data]);
         }catch (error) {
             throw error
         }

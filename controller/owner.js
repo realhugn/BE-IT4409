@@ -7,7 +7,6 @@ export const getOwner = async (req,res,next) =>{
         const id = req.params.id
         const user = await ownerService.getOwner(id)
         if(!user) return res.status(404).json({msg: "User Not Found", status: false})
-        console.log(req.user)
         if(id != req.user.userId || req.user.role != 'owner') 
             return res.status(404).json({msg: "Fail to load User", status: false})
         res.status(200).json({msg:"User Found", data: user, status: true})
@@ -19,11 +18,11 @@ export const getOwner = async (req,res,next) =>{
 
 export const updateOwner = async(req,res,next) => {
     try {
-        const {phone, name, string, birthday, address, email} = req.body
+        const {phone, name, string, birthday, address, email, gender} = req.body
         const id = req.params.id
         if(id != req.user.userId || req.user.role != 'owner') 
             return res.status(404).json({msg: "Fail", status: false})
-        const updatedUser = await ownerService.updateProfile({phone, name, string, birthday, address, email,id})
+        const updatedUser = await ownerService.updateProfile({phone, name, string, birthday, address, email, gender,id})
         if(updatedUser === null) return res.status(404).json({msg: "User Not Found", status: false})
         res.status(200).json({msg:"Updated User", data: updatedUser, status: true})
     } catch (error) {

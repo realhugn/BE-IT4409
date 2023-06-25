@@ -18,8 +18,14 @@ class Room {
 
     async create(data) {
         try {
-            const values = [data.name, data.house_id,data.max_user, data.description,data.status, data.cost]
-            const statement = `insert into room (name, house_id, maxUser, description,status,cost) values (?,?,?,?,?,?);`
+            let values = [data.name, data.house_id,data.max_user, data.description,data.status, data.cost]
+            let statement = `insert into room (name, house_id, max_user, description,status,cost) values (?,?,?,?,?,?);`
+
+            if (!data.status){
+                values = [data.name, data.house_id,data.max_user, data.description, data.cost]
+                statement = `insert into room (name, house_id, max_user, description, cost) values (?,?,?,?,?);`
+            }
+
             const rs = await db.query(statement, values)
             return await this.get(rs[0].insertId)
         } catch (error) {
@@ -40,7 +46,7 @@ class Room {
     async update(data) {
         try {
             const values = [data.name, data.max_user, data.description,data.status, data.cost,data.id]
-            const statement = `update room set name = ?, maxUser = ?, description = ? ,status= ?, cost =? where id = ? ;`
+            const statement = `update room set name = ?, max_user = ?, description = ? ,status= ?, cost =? where id = ? ;`
             await db.query(statement,values)
             return await this.get(data.id)
         } catch (error) {

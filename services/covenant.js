@@ -19,6 +19,15 @@ class CovenantService {
         }
     }
 
+    async updateCovenant(data) {
+        try{
+            const covenant = await Covenant.update(data)
+            return covenant
+        } catch (error) { 
+            throw error
+        }
+    }
+
     async deleteCovenant(id) {
         try {
             const isExist = await this.getCovenant(id)

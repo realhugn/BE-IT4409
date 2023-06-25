@@ -7,7 +7,7 @@ const route = express.Router()
 route.post("/", verifyTokenUser, isOwner, createRenter)
 route.get('/:id',verifyTokenUser,isAuth, getRenter)
 route.get('/house/:id', verifyTokenUser, renterInHouse)
-route.put('/:id', verifyTokenUser, isAuth, updateRenter)
+route.put('/:id', verifyTokenUser, updateRenter)
 route.delete('/:id',verifyTokenUser,isAuth, deleteRenter)
 route.put("/password/:id", verifyTokenUser,isAuth,updatePassword)
 

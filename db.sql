@@ -26,6 +26,7 @@ create table renter (
     gender varchar(20),
     address varchar(100),
     email varchar(70),
+    state  enum("RENTING", "DEPOSITING"),
     role varchar(70) DEFAULT "ROLE_RENTER",
     created_at timestamp DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp DEFAULT CURRENT_TIMESTAMP 
@@ -48,7 +49,7 @@ create table room (
     name varchar(100) NOT NULL,
     status enum("EMPTY_ROOM", "USING_ROOM", "DEPOSIT_ROOM", "STOP_ROOM") DEFAULT "EMPTY_ROOM",
     cost INT NOT NULL,
-    maxUser INT,
+    max_user INT,
     description varchar(200),
     Foreign key (house_id) REFERENCES house(id) ON DELETE CASCADE
 );
@@ -59,8 +60,9 @@ create table deposit (
     room_id INT NOT NULL ,
     tien_coc INT NOT NULL,
     status boolean,
-    start_time timestamp DEFAULT CURRENT_TIMESTAMP,
-    end_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    start_time DATE,
+    end_time DATE,
+    note varchar(200),
     Foreign key (renter_id) REFERENCES renter(id)  ON DELETE CASCADE,
     Foreign key (room_id) REFERENCES room(id)  ON DELETE CASCADE
 );
@@ -70,11 +72,11 @@ create table covenant (
     room_id INT NOT NULL unique,
     renter_id INT NOT NULL unique,
     duration INT NOT NULL,
-    pay_time INT NOT NULL,
+    pay_time DATE,
     pre_pay INT,
     note varchar(200),
-    started_date timestamp DEFAULT CURRENT_TIMESTAMP,
-    end_date timestamp DEFAULT CURRENT_TIMESTAMP,
+    started_date DATE,
+    end_date DATE,
     Foreign key (room_id) REFERENCES room(id)  ON DELETE CASCADE,
     Foreign key (renter_id) REFERENCES renter(id) ON DELETE CASCADE
 );
