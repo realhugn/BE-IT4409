@@ -1,5 +1,8 @@
 import houseService from '../services/houseService'
 import roomService from '../services/roomService'
+import renterService from '../services/renterService'
+import covenantService from '../services/covenant'
+import { checkRenterInRoom } from '../utils'
 
 export const createRoom = async (req,res,next) => {
     try {
@@ -32,9 +35,13 @@ export const getRoom = async (req,res,next) =>{
         const id = req.params.id
         const room = await roomService.getRoom(id)
         const house = await houseService.getHouse(room.house_id)
-        const isBelong = house.owner_id == req.user.userId
-        if (!isBelong) 
+        if(req.user.role == 'owner') {
+            const isBelong = house.owner_id == req.user.userId
+            if (!isBelong) 
+                return res.status(404).json({msg: "Fail", status: false})
+        } else if (req.user.role == 'renter' && !checkRenterInRoom(id, req.user.userId)) {
             return res.status(404).json({msg: "Fail", status: false})
+        }
         if(!room) return res.status(404).json({msg: "Not Found", status: false})
         res.status(200).json({msg:"Found", data: room, status: true})
     } catch (error) {

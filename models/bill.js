@@ -23,10 +23,10 @@ class Bill {
 
     async create(data) {
         try {
-            console.log(data)
+            const pre_bill = await db.query(`select * from bill order by created_at DESC LIMIT 1;`)
+            const debt = pre_bill[0][0].total_price - pre_bill[0][0].paid
             const statement = `insert into bill (covenant_id, debt, total_price) values (?,?,0);`
-            const rs = await db.query(statement, [data.covenant_id, data?.debt ?? 0])
-            const created_bill = await db.query(`select * from bill where id = ?`, [rs[0].insertId])
+            const rs = await db.query(statement, [data.covenant_id, debt])
             for(let i = 0; i < data.services.length;i++) {
                 const statement = `insert into bill_service (service_id,bill_id,num) values (?,?,?);`
                 await db.query(statement, [data.services[i].id, rs[0].insertId, data.services[i].num])
@@ -58,8 +58,9 @@ class Bill {
 
     async update(bill_id,data) {
         try {
-            const values = [ data.covenant_id, data?.debt ?? 0, bill_id]
-            const statement = `update bill set covenant_id = ?, debt = ?, updated_at = now() where id = ? ;`
+
+            const values = [ data.covenant_id, data.status,data.paid, bill_id]
+            const statement = `update bill set covenant_id = ? ,status= ?, paid = ?, updated_at = now() where id = ? ;`
             await db.query(statement, values)
             for (let i = 0 ; i < data.services.length ;i ++) {
                 await db.query(`update bill_service set num = ? where service_id =? and bill_id = ?`, [data.services[i].num, data.services[i].id, bill_id])
@@ -70,7 +71,7 @@ class Bill {
             throw error
         }
     }
-
+    
     async delete(id) {
         try {
             const statement = `DELETE  FROM bill where id = ? ;`

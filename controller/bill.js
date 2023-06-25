@@ -55,8 +55,8 @@ export const getBillByRenter = async (req,res,next) => {
 
 export const createBill = async (req,res,next) => {
     try {
-        const {covenant_id,debt,services} = req.body
-        const rs = await billService.createBill({covenant_id,debt,services})
+        const {covenant_id,services} = req.body
+        const rs = await billService.createBill({covenant_id,services})
         res.status(200).json({ msg: "create success", data: rs, status: true })
     } catch (error) {
         console.log(error)
