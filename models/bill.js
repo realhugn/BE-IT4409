@@ -23,8 +23,12 @@ class Bill {
 
     async create(data) {
         try {
-            const pre_bill = await db.query(`select * from bill order by created_at DESC LIMIT 1;`)
-            const debt = pre_bill[0][0].total_price - pre_bill[0][0].paid
+            const pre_bill = await db.query(`select * from bill where covenant_id = ? order by created_at DESC LIMIT 1;`, data.covenant_id)
+            let debt = 0
+            if (pre_bill[0].length > 0) {
+                console.log("pre_bill", pre_bill[0][0])
+                debt = pre_bill[0][0].total_price - pre_bill[0][0].paid
+            }
             const statement = `insert into bill (covenant_id, debt, total_price) values (?,?,0);`
             const rs = await db.query(statement, [data.covenant_id, debt])
             for(let i = 0; i < data.services.length;i++) {
@@ -105,7 +109,7 @@ class Bill {
 
     async getBillByRenter(renter_id) {
         try {
-            const statement = `select bill.* from bill, renter,covenant where renter.id = ? and renter.id = covenant.renter_id  and bill.covenant_id = covenant.id;`
+            const statement = `select bill.* from bill, renter,covenant where renter.id = ? and renter.id = covenant.renter_id  and bill.covenant_id = covenant.id order by bill.created_at DESC;`
             const rs = await db.query(statement, [renter_id])
             const bills = []
             for (let i = 0; i < rs[0].length ; i++) {

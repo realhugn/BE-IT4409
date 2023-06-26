@@ -2,6 +2,7 @@ import covenantService from '../services/covenant'
 import renterService from '../services/renterService'
 import roomService from '../services/roomService'
 import houseService from '../services/houseService'
+import ownerService from '../services/ownerService'
 
 export const createCovenant = async (req,res,next) => {
     try {
@@ -99,4 +100,32 @@ export const covenantHouse = async (req,res,next) => {
         console.log(error)
         return res.status(500).json({msg: "Server Error", status: false})
     }
+}
+export const inforCovenant = async (req,res,next) => {
+    try {
+        console.log("aaa ",req.user.userId)
+        const user = await renterService.getRenter(req.user.userId)
+        console.log(user)
+        const covenant = await covenantService.covenantRenter(req.user.userId)
+        const room = await roomService.getRoom(covenant.room_id)
+        const house = await houseService.getHouse(room.house_id)
+        const owner = await ownerService.getOwner(house.owner_id)
+        console.log(owner)
+        const body = {
+            'user': user,
+            'covenant': covenant,
+            'room': room,
+            'house': house,
+            'owner': {
+                'name': owner.name,
+                'email': owner.email,
+                'phone': owner.phone
+            }
+        }
+        res.status(200).json({msg:"All", data:body, status: true})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "Server Error", status: false})
+    }
+
 }
