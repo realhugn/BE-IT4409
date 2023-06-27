@@ -12,6 +12,7 @@ export const createCovenant = async (req,res,next) => {
         const isExist =( await covenantService.covenantRenter(renter_id)) && (await covenantService.get)
         if (isExist) return res.status(400).json({msg: "Covenant with this renter already exist", status : false})
         const room = await roomService.getRoom(room_id)
+        console.log(room)
         const house = await houseService.getHouse(room.house_id)
         const isBelong = house.owner_id == req.user.userId
         if (!isBelong) 

@@ -18,7 +18,7 @@ class Room {
 
     async create(data) {
         try {
-            let values = [data.name, data.house_id,data.max_user, data.description,data.status, data.cost]
+            let values = [data.name, data.house_id,data.max_user, data.description, 'EMPTY_ROOM', data.cost]
             let statement = `insert into room (name, house_id, max_user, description,status,cost) values (?,?,?,?,?,?);`
 
             if (!data.status){

@@ -8,7 +8,7 @@ route.post("/", verifyTokenUser, isOwner, createRenter)
 route.get('/:id',verifyTokenUser,isAuth, getRenter)
 route.get('/house/:id', verifyTokenUser, renterInHouse)
 route.put('/:id', verifyTokenUser, updateRenter)
-route.delete('/:id',verifyTokenUser,isAuth, deleteRenter)
+route.delete('/:id',verifyTokenUser, deleteRenter)
 route.put("/password/:id", verifyTokenUser,isAuth,updatePassword)
 
 export default route
