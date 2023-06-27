@@ -34,7 +34,7 @@ class Covenant {
             const values = [ data.room_id,data.renter_id, data.duration,data.pay_time,data.pre_pay, data.note, data.started_date,data.end_date]
             const statement = `insert into covenant (room_id, renter_id, duration,pay_time,pre_pay, note, started_date, end_date) values (?,?,?,?,?,?,DATE(?),DATE(?));`
             const rs = await db.query(statement, values)
-            await db.query(`update room set status = "USING_ROOM";`)
+            await db.query(`update room set status = "USING_ROOM" where id = ?;`, data.room_id)
             return await this.get(rs[0].insertId)
         } catch (error) {
             throw error
@@ -58,7 +58,7 @@ class Covenant {
         try {
             const statement = `DELETE  FROM covenant where id = ? ;` 
             const rs = await db.query(statement,[id])
-            await db.query(`update room set status = "EMPTY_ROOM";`)
+            await db.query(`update room set status = "EMPTY_ROOM" where id = ?;`, data.room_id)
             return rs
         } catch (error) {
             throw error

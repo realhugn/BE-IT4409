@@ -56,7 +56,7 @@ export const createRenter = async(req,res,next) => {
         res.status(200).json({msg:"Register success", status: true, data: {newRenter, token: accessToken}})
     } catch (error) {
         console.log(error)
-        return res.status(500).json({msg: "Created Fail", status: false})
+        return res.status(500).json({msg:error.message, status: false})
     }
 }
 
