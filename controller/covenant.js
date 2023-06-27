@@ -3,6 +3,7 @@ import renterService from '../services/renterService'
 import roomService from '../services/roomService'
 import houseService from '../services/houseService'
 import ownerService from '../services/ownerService'
+import serviceService from '../services/serviceService'
 
 export const createCovenant = async (req,res,next) => {
     try {
@@ -104,14 +105,17 @@ export const covenantHouse = async (req,res,next) => {
 }
 export const inforCovenant = async (req,res,next) => {
     try {
-        console.log("aaa ",req.user.userId)
         const user = await renterService.getRenter(req.user.userId)
-        console.log(user)
         const covenant = await covenantService.covenantRenter(req.user.userId)
         const room = await roomService.getRoom(covenant.room_id)
+        const serviceId = await serviceService.servicesInRoom(room.id)
+        const services = await serviceId.map( async (service_id) => {
+            const service = await serviceService.getService(service_id)
+            return service
+        })
+        room.service = await Promise.all(services);
         const house = await houseService.getHouse(room.house_id)
         const owner = await ownerService.getOwner(house.owner_id)
-        console.log(owner)
         const body = {
             'user': user,
             'covenant': covenant,
