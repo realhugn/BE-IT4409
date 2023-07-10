@@ -1,6 +1,15 @@
 import Covenant from "../models/covenant"
 
 class CovenantService {
+    async getAllCovenantActive() {
+        try {
+            const covenants = await Covenant.getAllActive()
+            return covenants
+        } catch (error) {
+            throw error
+        }
+    }
+
      async createCovenant (data) {
         try {
             const newCovenant = await Covenant.create(data)

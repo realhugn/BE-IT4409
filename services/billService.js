@@ -1,4 +1,4 @@
-import Bill from '../models/bill'
+    import Bill from '../models/bill'
 class BillService {
     async getHouseBill(house_id) {
         return await Bill.getBillsByHouseId(house_id)
@@ -27,6 +27,9 @@ class BillService {
     }
     async getBillByRenter(renter_id) {
         return Bill.getBillByRenter(renter_id)
+    }
+    async checkHaveBillInMoth(covenant_id) {
+        return Bill.checkHaveBillInMoth(covenant_id)
     }
 }
 

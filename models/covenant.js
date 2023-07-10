@@ -1,6 +1,28 @@
 import {db} from '../configs/db.js'
 
 class Covenant {
+    async getAllActive() {
+        try {
+            const statement = `
+            SELECT covenant.*
+            FROM covenant
+            JOIN renter ON renter.id = covenant.renter_id
+            WHERE CURDATE() BETWEEN covenant.started_date AND covenant.end_date
+            `;
+            const rs = await db.query(statement)
+            for (let i in rs[0]) {
+                let services = await db.query(`select service.id, service.cost from service_room, service 
+                where service_room.service_id = service.id and service_room.room_id = ?`, [rs[0][i].room_id])
+                rs[0][i]['services'] = services[0]
+                // console.log(rs[0][i])
+            }
+            return rs[0]
+
+        } catch (error) {
+            throw error
+        }
+    }
+
     async get(id) {
         try {
             const statement = `
