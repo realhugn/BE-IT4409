@@ -33,7 +33,7 @@ class Bill {
             const rs = await db.query(statement, [data.covenant_id, debt])
             for(let i = 0; i < data.services.length;i++) {
                 const statement = `insert into bill_service (service_id,bill_id,num) values (?,?,?);`
-                await db.query(statement, [data.services[i].id, rs[0].insertId, data.services[i].num])
+                await db.query(statement, [data.services[i].id, rs[0].insertId, data.services[i].num??0])
             }
             await this.total_price(rs[0].insertId)
             return await this.get(rs[0].insertId)
@@ -117,6 +117,20 @@ class Bill {
                 bills.push(x)
             }
             return bills
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async checkHaveBillInMoth(covenant_id) {
+        try {
+            const statement = `select * from bill where covenant_id = ? and MONTH(created_at) = MONTH(NOW()) and YEAR(created_at) = YEAR(NOW());`
+            const rs = await db.query(statement, [covenant_id])
+            if (rs[0].length > 0) {
+                return true
+            } else {
+                return false
+            }
         } catch (error) {
             throw error
         }

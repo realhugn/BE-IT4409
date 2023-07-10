@@ -58,7 +58,7 @@ export const updatePassword = async (req,res, next) => {
         if(!isValidPassword) return res.status(403).json({msg: "Wrong old password", status: false})
         const hashPassword = await bcrypt.hash(newPassword,8)
         await ownerService.updatePassword({id, password: hashPassword})
-        res.status(200).json({msg:"Updated Password", status: true})
+        return res.status(200).json({msg:"Updated Password", status: true})
     } catch (error) {
         console.log(error)
         return res.status(200).json({msg: "Server Error", status: false})
