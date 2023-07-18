@@ -32,7 +32,7 @@ class Deposit {
         try {
             const values = [data.renter_id, data.room_id, data.tien_coc,data.status, data.start_time, data.end_time]
             const statement = `insert into deposit (renter_id, room_id,tien_coc, status, start_time, end_time) values (?,?,?,?,Date(?),Date(?));`
-            await db.query(`update room set status = "DEPOSIT_ROOM";`)
+            await db.query(`update room set status = "DEPOSIT_ROOM" where id = ?;`, data.room_id)
             const rs = await db.query(statement, values)
             return await this.get(rs[0].insertId)
         } catch (error) {
@@ -44,7 +44,7 @@ class Deposit {
         try {
             const statement = `DELETE  FROM deposit where id = ? ;` 
             const rs = await db.query(statement,[id])
-            await db.query(`update room set status = "EMPTY_ROOM";`)
+            await db.query(`update room set status = "EMPTY_ROOM" where id = ?;`, data.room_id)
             return rs
         } catch (error) {
             throw error
