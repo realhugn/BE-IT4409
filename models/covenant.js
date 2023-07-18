@@ -17,7 +17,7 @@ class Covenant {
             if(rs[0].length > 0) {
                 rs[0][0]['started_date'] = new Date(rs[0][0].started_date).toLocaleDateString("sv-SE")
                 rs[0][0]['end_date'] = new Date(rs[0][0].end_date).toLocaleDateString("sv-SE")
-                rs[0][0]['pay_time'] = new Date(rs[0][0].pay_time).toLocaleDateString("sv-SE")
+                if (rs[0][0].pay_time != null) rs[0][0]['pay_time'] = new Date(rs[0][0].pay_time).toLocaleDateString("sv-SE")
                 rs[0][0]['renter_birthday'] = new Date(rs[0][0].renter_birthday).toLocaleDateString("sv-SE")
                 return rs[0][0]
             } else {
@@ -72,7 +72,7 @@ class Covenant {
             if(rs[0].length > 0) {
                 rs[0][0]['started_date'] = new Date(rs[0][0].started_date).toLocaleDateString("sv-SE")
                 rs[0][0]['end_date'] = new Date(rs[0][0].end_date).toLocaleDateString("sv-SE")
-                rs[0][0]['pay_time'] = new Date(rs[0][0].pay_time).toLocaleDateString("sv-SE")
+                if (rs[0][0].pay_time != null) rs[0][0]['pay_time'] = new Date(rs[0][0].pay_time).toLocaleDateString("sv-SE")
                 return rs[0][0]
             } else {
                 return null
@@ -95,10 +95,11 @@ class Covenant {
                 house.id = ? and 
                 covenant.renter_id = renter.id;`
             const rs = await db.query(statement, [ "room_name", "renter_name", "house_name", "house_id", 'renter_phone', 'renter_birthday', 'renter_gender', id])
+            console.log(rs[0][0])
             for (let i in rs[0]){
                 rs[0][i]['started_date'] = new Date(rs[0][i].started_date).toLocaleDateString("sv-SE")
                 rs[0][i]['end_date'] = new Date(rs[0][i].end_date).toLocaleDateString("sv-SE")
-                rs[0][i]['pay_time'] = new Date(rs[0][i].pay_time).toLocaleDateString("sv-SE")
+                if (rs[0][0].pay_time != null) rs[0][i]['pay_time'] = new Date(rs[0][i].pay_time).toLocaleDateString("sv-SE")
                 rs[0][i]['renter_birthday'] = new Date(rs[0][i].renter_birthday).toLocaleDateString("sv-SE")
             }
             return rs[0]
